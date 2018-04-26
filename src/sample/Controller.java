@@ -1,20 +1,18 @@
 package sample;
 
+import impl.Logic;
+import impl.Node;
+import impl.Relation;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
-import org.omg.CORBA.Environment;
 
-import java.awt.font.FontRenderContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -28,7 +26,7 @@ public class Controller {
     int radius = 8;
     ArrayList<Double> positionsX;
     ArrayList<Double> positionsY;
-    ArrayList<Relation> weights;
+    ArrayList<Node> nodes;
 
     @FXML
     private ResourceBundle resources;
@@ -66,9 +64,13 @@ public class Controller {
 
     @FXML
     void drawNodes(MouseEvent event) {
-        weights = new ArrayList<Relation>();
+        nodes = new ArrayList<Node>();
         String numberOfNodes = textPane.getText();
         int numOfNodes = Integer.parseInt(numberOfNodes);
+        for(int i = 0; i < numOfNodes; i++) {
+            Node node = new Node((char)(i + 97) + "");
+            nodes.add(node);
+        }
         paneInPane.getChildren().clear();
         x = 50;
         positionsX = new ArrayList();
@@ -84,7 +86,7 @@ public class Controller {
             positionsY.add(1.0 * y);
 
             Label numLabel = new Label();
-            numLabel.setText(String.valueOf(i + 1));
+            numLabel.setText((char)(96 + i + 1) + "");
             numLabel.setLayoutX(x + deltaX - 5);
             numLabel.setLayoutY(y + 10);
 
@@ -104,6 +106,13 @@ public class Controller {
 
     @FXML
     void drawLines(MouseEvent event) {
+
+        fromField.setText(String.valueOf((Integer.valueOf(fromField.getText().charAt(0)) - 96)));
+        toField.setText(String.valueOf((Integer.valueOf(toField.getText().charAt(0)) - 96)));
+        if(weightField.getText().equals("")) {
+            weightField.setText("1");
+        }
+
         int numOfInitNode = Integer.valueOf(fromField.getText());
         int numOfFinalNode = Integer.valueOf(toField.getText());
         int differenceBetweenNodes = numOfFinalNode - numOfInitNode;
@@ -224,8 +233,8 @@ public class Controller {
 
 
             String weight = weightField.getText();
-            Relation r = new Relation(Integer.valueOf(weight), numOfInitNode, numOfFinalNode);
-            weights.add(r);
+            Relation relation = new Relation(Integer.valueOf(weight), nodes.get(numOfFinalNode - 1));
+            nodes.get(numOfInitNode - 1).relations.add(relation);
             Label weightLabel = new Label();
             Font f;
             if (differenceBetweenNodes == 1) {
@@ -246,10 +255,10 @@ public class Controller {
 
         }
         weightTextBox.setFont(new Font(18));
-        weightTextBox.appendText(String.valueOf(numOfInitNode) + "      ⟿");
+        weightTextBox.appendText((char)(numOfInitNode + 96) + "      ⟿");
         weightTextBox.setStyle("-fx-text-fill: blue;");
         weightTextBox.appendText(weightField.getText());
-        weightTextBox.appendText("⟿      " + String.valueOf(numOfFinalNode) + "\n");
+        weightTextBox.appendText("⟿      " + (char)(numOfFinalNode + 96) + "\n");
         fromField.clear();
         toField.clear();
         weightField.clear();
@@ -319,7 +328,7 @@ public class Controller {
 
     @FXML
     void calculateTransferFunction(MouseEvent event) {
-      TransferFunction s = new TransferFunction(weights);
+      Logic s = new Logic(nodes);
     }
 
 }

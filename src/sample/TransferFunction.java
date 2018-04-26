@@ -1,5 +1,7 @@
 package sample;
 
+import impl.Relation;
+
 import java.util.ArrayList;
 
 public class TransferFunction {
