@@ -70,7 +70,7 @@ public class Controller {
     int globalStartY;
     int globalEndX;
     int globalEndY;
-    int offset = 15;
+    int offset = 30;
     @FXML
     void drawLineByDrag(MouseEvent event) {
         pane.startFullDrag();
@@ -96,13 +96,16 @@ public class Controller {
                 toField.setText((char)(97+i) + "");
             }
         }
-        weightField.setText("1");
+        if(weightField.getText() == "") {
+            weightField.setText("1");
+        }
         plotButton.fire();
     }
 
     @FXML
     void drawNodes(MouseEvent event) {
         nodes = new ArrayList<Node>();
+        weightTextBox.clear();
         String numberOfNodes = textPane.getText();
         int numOfNodes = Integer.parseInt(numberOfNodes);
         numbOfNodes = numOfNodes;

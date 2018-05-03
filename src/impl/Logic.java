@@ -30,11 +30,6 @@ public class Logic {
             startCall = true;
             dfsLoops(nodes.get(i),nodes.get(i));
         }
-        for(int i = 0; i < loops.size(); i++) {
-            System.out.println(loops.get(i).getName());
-            System.out.println(loops.get(i).getWeight());
-            System.out.println("----------------");
-        }
     }
 
     public boolean dfsForward(Node checkNode){
