@@ -24,6 +24,7 @@ public class Controller {
     int y = 300;
     int deltaX = 150;
     int radius = 8;
+    public static int numbOfNodes;
     ArrayList<Double> positionsX;
     ArrayList<Double> positionsY;
     ArrayList<Node> nodes;
@@ -63,10 +64,25 @@ public class Controller {
     private TextArea weightTextBox;
 
     @FXML
+    void drawLineByDrag(MouseEvent event) {
+        System.out.print(event.getX()+",");
+        System.out.println(event.getY());
+        pane.startFullDrag();
+
+    }
+
+    @FXML
+    void drawFinalAfterDrag(MouseEvent event) {
+        System.out.print(event.getX() + ",");
+        System.out.println(event.getY());
+    }
+
+    @FXML
     void drawNodes(MouseEvent event) {
         nodes = new ArrayList<Node>();
         String numberOfNodes = textPane.getText();
         int numOfNodes = Integer.parseInt(numberOfNodes);
+        numbOfNodes = numOfNodes;
         for(int i = 0; i < numOfNodes; i++) {
             Node node = new Node((char)(i + 97) + "");
             nodes.add(node);
