@@ -3,7 +3,10 @@ package sample;
 import impl.Logic;
 import impl.Node;
 import impl.Relation;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -63,18 +66,38 @@ public class Controller {
     @FXML
     private TextArea weightTextBox;
 
+    int globalStartX;
+    int globalStartY;
+    int globalEndX;
+    int globalEndY;
+    int offset = 15;
     @FXML
     void drawLineByDrag(MouseEvent event) {
-        System.out.print(event.getX()+",");
-        System.out.println(event.getY());
         pane.startFullDrag();
-
+        globalStartX = (int)event.getX();
+        globalStartY = (int)event.getY();
+        for(int i = 0; i < positionsX.size(); i++) {
+            double diffX = positionsX.get(i) - globalStartX;
+            double diffY = positionsY.get(i) - globalStartY;
+            if(diffX > -offset && diffX < offset && diffY > -offset && diffY < offset)  {
+                fromField.setText((char)(97+i) + "");
+            }
+        }
     }
 
     @FXML
     void drawFinalAfterDrag(MouseEvent event) {
-        System.out.print(event.getX() + ",");
-        System.out.println(event.getY());
+        globalEndX = (int)event.getX();
+        globalEndY = (int)event.getY();
+        for(int i = 0; i < positionsX.size(); i++) {
+            double diffX = positionsX.get(i) - globalEndX;
+            double diffY = positionsY.get(i) - globalEndY;
+            if(diffX > - offset && diffX < offset && diffY > -offset && diffY < offset)  {
+                toField.setText((char)(97+i) + "");
+            }
+        }
+        weightField.setText("1");
+        plotButton.fire();
     }
 
     @FXML
@@ -83,15 +106,15 @@ public class Controller {
         String numberOfNodes = textPane.getText();
         int numOfNodes = Integer.parseInt(numberOfNodes);
         numbOfNodes = numOfNodes;
-        for(int i = 0; i < numOfNodes; i++) {
-            Node node = new Node((char)(i + 97) + "");
+        for (int i = 0; i < numOfNodes; i++) {
+            Node node = new Node((char) (i + 97) + "");
             nodes.add(node);
         }
         paneInPane.getChildren().clear();
         x = 50;
         positionsX = new ArrayList();
         positionsY = new ArrayList();
-        for(int i = 0; i < numOfNodes; i++) {
+        for (int i = 0; i < numOfNodes; i++) {
             Circle circle = new Circle();
             Circle circle2 = new Circle();
             circle2.setFill(Color.WHITE);
@@ -102,7 +125,7 @@ public class Controller {
             positionsY.add(1.0 * y);
 
             Label numLabel = new Label();
-            numLabel.setText((char)(96 + i + 1) + "");
+            numLabel.setText((char) (96 + i + 1) + "");
             numLabel.setLayoutX(x + deltaX - 5);
             numLabel.setLayoutY(y + 10);
 
@@ -121,18 +144,18 @@ public class Controller {
 
 
     @FXML
-    void drawLines(MouseEvent event) {
+    void drawLines(ActionEvent event) {
 
         fromField.setText(String.valueOf((Integer.valueOf(fromField.getText().charAt(0)) - 96)));
         toField.setText(String.valueOf((Integer.valueOf(toField.getText().charAt(0)) - 96)));
-        if(weightField.getText().equals("")) {
+        if (weightField.getText().equals("")) {
             weightField.setText("1");
         }
 
         int numOfInitNode = Integer.valueOf(fromField.getText());
         int numOfFinalNode = Integer.valueOf(toField.getText());
         int differenceBetweenNodes = numOfFinalNode - numOfInitNode;
-        if(differenceBetweenNodes == 0) {
+        if (differenceBetweenNodes == 0) {
             Circle c = new Circle();
             c.setLayoutX(positionsX.get(numOfInitNode - 1));
             c.setLayoutY(positionsY.get(numOfInitNode - 1) - 30);
@@ -158,7 +181,7 @@ public class Controller {
             l1.setEndX(positionsX.get(numOfInitNode - 1) - 10);
             l1.setEndY(positionsY.get(numOfInitNode - 1) - 65);
             l1.setStrokeWidth(2);
-            l1.setStroke(Color.gray(0.1,0.5));
+            l1.setStroke(Color.gray(0.1, 0.5));
 
             Line l2 = new Line();
             l2.setStartX(positionsX.get(numOfInitNode - 1));
@@ -166,7 +189,7 @@ public class Controller {
             l2.setEndX(positionsX.get(numOfInitNode - 1) - 9);
             l2.setEndY(positionsY.get(numOfInitNode - 1) - 53);
             l2.setStrokeWidth(2);
-            l2.setStroke(Color.gray(0.1,0.5));
+            l2.setStroke(Color.gray(0.1, 0.5));
             paneInPane.getChildren().add(l1);
             paneInPane.getChildren().add(l2);
             paneInPane.getChildren().add(weightLabel);
@@ -185,7 +208,7 @@ public class Controller {
 
 
             double Height = (endX - startX) / 4;
-            if(differenceBetweenNodes == 1) {
+            if (differenceBetweenNodes == 1) {
                 Line arcc = new Line();
                 arcc.setFill(Color.TRANSPARENT);
                 arcc.setStrokeWidth(2);
@@ -205,7 +228,7 @@ public class Controller {
                 paneInPane.getChildren().add(c);
 
             } else {
-                if(differenceBetweenNodes < 0) {
+                if (differenceBetweenNodes < 0) {
                     endX += 7;
                     endY += 6;
                     arc.setStroke(Color.RED);
@@ -216,8 +239,7 @@ public class Controller {
                     c.setLayoutX(startX);
                     c.setLayoutY(startY);
                     paneInPane.getChildren().add(c);
-                }
-                else if(differenceBetweenNodes > 0) {
+                } else if (differenceBetweenNodes > 0) {
                     endX -= 7;
                     endY -= 6;
                     arc.setStroke(Color.gray(0.1));
@@ -239,10 +261,9 @@ public class Controller {
                 arc.setControlX2(endX - (endX - startX) / 3);
                 arc.setControlY2(startY - Height);
                 paneInPane.getChildren().add(arc);
-                if(differenceBetweenNodes > 0) {
+                if (differenceBetweenNodes > 0) {
                     drawArrowRight(endX, endY);
-                }
-                else if (differenceBetweenNodes < 0 ){
+                } else if (differenceBetweenNodes < 0) {
                     drawArrowLeft(endX, endY);
                 }
             }
@@ -271,10 +292,10 @@ public class Controller {
 
         }
         weightTextBox.setFont(new Font(18));
-        weightTextBox.appendText((char)(numOfInitNode + 96) + "      ⟿");
+        weightTextBox.appendText((char) (numOfInitNode + 96) + "      ⟿");
         weightTextBox.setStyle("-fx-text-fill: blue;");
         weightTextBox.appendText(weightField.getText());
-        weightTextBox.appendText("⟿      " + (char)(numOfFinalNode + 96) + "\n");
+        weightTextBox.appendText("⟿      " + (char) (numOfFinalNode + 96) + "\n");
         fromField.clear();
         toField.clear();
         weightField.clear();
@@ -325,7 +346,7 @@ public class Controller {
         l1.setEndX(endX - 10);
         l1.setEndY(endY - 15);
         l1.setStrokeWidth(2);
-        l1.setStroke(Color.gray(0.1,0.5));
+        l1.setStroke(Color.gray(0.1, 0.5));
 
         Line l2 = new Line();
         l2.setStartX(endX);
@@ -333,18 +354,19 @@ public class Controller {
         l2.setEndX(endX - 15);
         l2.setEndY(endY);
         l2.setStrokeWidth(2);
-        l2.setStroke(Color.gray(0.1,0.5));
+        l2.setStroke(Color.gray(0.1, 0.5));
 
         paneInPane.getChildren().add(l1);
         paneInPane.getChildren().add(l2);
 
     }
+
     @FXML
     private Button transferFunctionButton;
 
     @FXML
     void calculateTransferFunction(MouseEvent event) {
-      Logic s = new Logic(nodes);
+        Logic s = new Logic(nodes);
     }
 
 }

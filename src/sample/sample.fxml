@@ -33,7 +33,7 @@
         <TextField id="textPane" fx:id="fromField" alignment="CENTER" layoutX="14.0" layoutY="189.0" prefHeight="32.0" prefWidth="43.0" />
         <TextField id="textPane" fx:id="toField" alignment="CENTER" layoutX="79.0" layoutY="189.0" prefHeight="32.0" prefWidth="43.0" />
         <TextField id="textPane" fx:id="weightField" alignment="CENTER" layoutX="142.0" layoutY="189.0" prefHeight="32.0" prefWidth="43.0" />
-        <Button id="constructButton" fx:id="plotButton" font="$x1" layoutX="46.0" layoutY="232.0" minHeight="24.0" mnemonicParsing="false" onMouseClicked="#drawLines" prefHeight="32.0" prefWidth="109.0" text="Plot" />
+        <Button id="constructButton" fx:id="plotButton" font="$x1" layoutX="46.0" layoutY="232.0" minHeight="24.0" mnemonicParsing="false" onAction="#drawLines" prefHeight="32.0" prefWidth="109.0" text="Plot" />
         <Circle fill="BLACK" layoutX="160.0" layoutY="59.0" opacity="0.9" radius="12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
         <Circle fill="WHITE" layoutX="160.0" layoutY="59.0" radius="12.000003814697266" stroke="BLACK" strokeType="INSIDE" />
         <Label layoutX="83.0" layoutY="21.0" text="Nodes" />
