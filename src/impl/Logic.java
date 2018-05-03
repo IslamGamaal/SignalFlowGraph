@@ -21,26 +21,29 @@ public class Logic {
         endNode = nodes.get(nodes.size()-1);
         forwardPaths = new ArrayList<ForwardPath>();
         loops = new ArrayList<Loop>();
+        stack.add(startNode);
         dfsForward(startNode);
         visited = new boolean[nodes.size()];
-        stack = new Stack();
         for (int i = 0; i < nodes.size(); i++) {
+            stack = new Stack();
+            stack.add(nodes.get(i));
             startCall = true;
             dfsLoops(nodes.get(i),nodes.get(i));
         }
-
     }
 
     public boolean dfsForward(Node checkNode){
         boolean temp =false;
         if (checkNode == endNode){
             ForwardPath forwardPath = new ForwardPath();
-            while (stack.size()!=0){
-                forwardPath.forwardPath.add((Node) stack.pop());
+            Stack tempStack = new Stack();
+            while (stack.size()!= 0){
+                tempStack.push(stack.pop());
             }
-            forwardPath.forwardPath.add(startNode);
-
-            for (int i = forwardPath.forwardPath.size()-1; i >= 0 ; i--) {
+            while (tempStack.size()!=0){
+                forwardPath.forwardPath.add((Node) tempStack.pop());
+            }
+            for (int i = 0; i < forwardPath.forwardPath.size() ; i++) {
                 stack.push(forwardPath.forwardPath.get(i));
             }
             forwardPaths.add(forwardPath);
@@ -53,7 +56,7 @@ public class Logic {
         for (int i = 0; i <checkNode.relations.size() ; i++) {
             stack.push(checkNode.relations.get(i).nextNode);
             temp = dfsForward(checkNode.relations.get(i).nextNode);
-            if (stack.size() != 0) {
+            while (stack.size() >0&& stack.peek() != checkNode){
                 stack.pop();
             }
         }
@@ -67,11 +70,13 @@ public class Logic {
         boolean temp =false;
         if (sNode == checkNode && !startCall) {
             Loop loop = new Loop();
-            while (stack.size()!=0){
-                loop.loop.add((Node) stack.pop());
+            Stack tempStack = new Stack();
+            while (stack.size()!= 0){
+                tempStack.push(stack.pop());
             }
-            //loop.loop.add(startNode);
-
+            while (tempStack.size()!=0){
+                loop.loop.add((Node) tempStack.pop());
+            }
             for (int i = loop.loop.size()-1; i >= 0 ; i--) {
                 stack.push(loop.loop.get(i));
             }
@@ -100,5 +105,7 @@ public class Logic {
     public void transferFunction(){
 
     }
+
+
 
 }
