@@ -77,7 +77,7 @@ public class Logic {
             while (tempStack.size()!=0){
                 loop.loop.add((Node) tempStack.pop());
             }
-            for (int i = loop.loop.size()-1; i >= 0 ; i--) {
+            for (int i = 0; i < loop.loop.size() ; i++) {
                 stack.push(loop.loop.get(i));
             }
             loops.add(loop);
@@ -94,7 +94,7 @@ public class Logic {
         for (int i = 0; i <checkNode.relations.size() ; i++) {
             stack.push(checkNode.relations.get(i).nextNode);
             dfsLoops(sNode , checkNode.relations.get(i).nextNode);
-            if (stack.size() !=0) {
+            while (stack.size() >0&& stack.peek() != checkNode){
                 stack.pop();
             }
         }
