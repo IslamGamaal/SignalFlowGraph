@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.javafx.geom.Arc2D;
 import impl.Logic;
 import impl.Node;
 import impl.Relation;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
@@ -48,21 +50,20 @@ public class Controller {
     private Button plotButton;
 
     @FXML
-    private ScrollPane pane;
+    public ScrollPane pane;
 
     @FXML
-    private Pane paneInPane;
+    public Pane paneInPane;
 
     @FXML
     private TextField textPane;
 
     @FXML
     private TextField toField;
-
     @FXML
     private TextField weightField;
-
-
+    @FXML
+    private Button transferFunctionButton;
     @FXML
     private TextArea weightTextBox;
 
@@ -71,10 +72,29 @@ public class Controller {
     int globalEndX;
     int globalEndY;
     int offset = 30;
+
+    @FXML
+    void initiallize() {
+        paneInPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("55");
+            }
+        });
+    }
+    CubicCurve c;
+    Line l;
+
+    @FXML
+    void globals(MouseEvent event) {
+        globalStartX =(int) event.getX();
+        globalStartY =(int) event.getY();
+    }
+
     @FXML
     void drawLineByDrag(MouseEvent event) {
-        pane.startFullDrag();
-        globalStartX = (int)event.getX();
+        System.out.println("called me");
+        globalStartX = (int)event.getX() - 10;
         globalStartY = (int)event.getY();
         for(int i = 0; i < positionsX.size(); i++) {
             double diffX = positionsX.get(i) - globalStartX;
@@ -83,10 +103,84 @@ public class Controller {
                 fromField.setText((char)(97+i) + "");
             }
         }
+        paneInPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Arc k = new Arc();
+                paneInPane.getChildren().remove(c);
+                paneInPane.getChildren().remove(l);
+                if(mouseEvent.getX() - globalStartX < 170 && mouseEvent.getX() - globalStartX > 0) {
+                    l = new Line();
+                    l.setStroke(Color.BLACK);
+                    l.setStrokeWidth(2);
+                    l.setStartX(globalStartX);
+                    l.setStartY(globalStartY);
+                    l.setEndX(mouseEvent.getX());
+                    l.setEndY(mouseEvent.getY());
+                    paneInPane.getChildren().add(l);
+                } else {
+                    c = new CubicCurve();
+                    c.setFill(Color.TRANSPARENT);
+                    c.setStroke(Color.BLACK);
+                    c.setStrokeWidth(2);
+                    c.setStartX(globalStartX);
+                    c.setStartY(globalStartY);
+
+                    c.setEndX(mouseEvent.getX());
+                    c.setEndY(mouseEvent.getY());
+
+                    c.setControlX1(globalStartX + (mouseEvent.getX() - globalStartX) / 3);
+                    c.setControlX2(globalStartX + 2 * (mouseEvent.getX() - globalStartX) / 3);
+                    if (mouseEvent.getX() > globalStartX) {
+                        c.setControlY2(globalStartY - 80);
+                        c.setControlY1(globalStartY - 80);
+                    } else {
+                        c.setStartX(globalStartX + 20);
+                        c.setControlY2(globalStartY + 80);
+                        c.setControlY1(globalStartY + 80);
+                        c.setStroke(Color.RED);
+                    }
+
+                    paneInPane.getChildren().add(c);
+                }
+            }
+        });
+
+        paneInPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                paneInPane.getChildren().remove(c);
+                paneInPane.getChildren().remove(l);
+
+                globalEndX = (int)mouseEvent.getX();
+                globalEndY = (int)mouseEvent.getY();
+                for(int i = 0; i < positionsX.size(); i++) {
+                    double diffX = positionsX.get(i) - globalEndX;
+                    double diffY = positionsY.get(i) - globalEndY;
+                    if(diffX > - offset && diffX < offset && diffY > -offset && diffY < offset)  {
+                        toField.setText((char)(97+i) + "");
+                    }
+                }
+                if(weightField.getText() == "") {
+                    weightField.setText("1");
+                }
+                if(fromField.getText().equals("") || toField.getText().equals("")) {
+                    return;
+                }
+                else if((fromField.getText().charAt(0) < 'a' && fromField.getText().charAt(0) > 'z') || (toField.getText().charAt(0) < 'a' && toField.getText().charAt(0) > 'z')) {}
+                else {
+                    plotButton.fire();
+                }
+            }
+        });
+
     }
 
     @FXML
     void drawFinalAfterDrag(MouseEvent event) {
+        paneInPane.getChildren().remove(c);
         globalEndX = (int)event.getX();
         globalEndY = (int)event.getY();
         for(int i = 0; i < positionsX.size(); i++) {
@@ -99,7 +193,13 @@ public class Controller {
         if(weightField.getText() == "") {
             weightField.setText("1");
         }
-        plotButton.fire();
+        if(fromField.getText().equals("") || toField.getText().equals("")) {
+            return;
+        }
+        else if((fromField.getText().charAt(0) < 'a' && fromField.getText().charAt(0) > 'z') || (toField.getText().charAt(0) < 'a' && toField.getText().charAt(0) > 'z')) {}
+        else {
+            plotButton.fire();
+        }
     }
 
     @FXML
@@ -144,11 +244,8 @@ public class Controller {
         }
 
     }
-
-
     @FXML
     void drawLines(ActionEvent event) {
-
         fromField.setText(String.valueOf((Integer.valueOf(fromField.getText().charAt(0)) - 96)));
         toField.setText(String.valueOf((Integer.valueOf(toField.getText().charAt(0)) - 96)));
         if (weightField.getText().equals("")) {
@@ -303,6 +400,10 @@ public class Controller {
         toField.clear();
         weightField.clear();
     }
+    @FXML
+    void calculateTransferFunction(MouseEvent event) {
+        Logic s = new Logic(nodes);
+    }
 
     private void drawArrow(double v, double v1) {
         Line l1 = new Line();
@@ -319,8 +420,6 @@ public class Controller {
         l2.setEndY(v1 + 5);
         paneInPane.getChildren().add(l2);
     }
-
-
     private void drawArrowLeft(double endX, double endY) {
         Line l1 = new Line();
         l1.setStartX(endX);
@@ -341,7 +440,6 @@ public class Controller {
         paneInPane.getChildren().add(l1);
         paneInPane.getChildren().add(l2);
     }
-
     private void drawArrowRight(double endX, double endY) {
         Line l1 = new Line();
         l1.setStartX(endX);
@@ -364,12 +462,5 @@ public class Controller {
 
     }
 
-    @FXML
-    private Button transferFunctionButton;
-
-    @FXML
-    void calculateTransferFunction(MouseEvent event) {
-        Logic s = new Logic(nodes);
-    }
 
 }
