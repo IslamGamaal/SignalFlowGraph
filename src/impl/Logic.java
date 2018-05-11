@@ -1,6 +1,8 @@
 package impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 public class Logic {
@@ -124,12 +126,33 @@ public class Logic {
         }
     }
 
-    private boolean areUntouched(ArrayList<Loop> testedLoops) {
-        return true;
     }
 
-    private ArrayList getOnesIndecies() {
-        return null;
+    private boolean areUntouched(ArrayList<Loop> loops) {
+        Set allNodes = new HashSet();
+        String allNodesCascaded = "";
+        int lengthOfAllLoops = 0;
+        for(int i = 0; i < loops.size(); i++) {
+            allNodesCascaded+= loops.get(i).getName();
+            lengthOfAllLoops+= loops.get(i).getName().length();
+        }
+        for(int i = 0; i < allNodesCascaded.length(); i++) {
+            allNodes.add(allNodesCascaded.charAt(i));
+        }
+        if(allNodes.size() == lengthOfAllLoops) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private ArrayList<Integer> getOnesIndecies(String binaryRepresentation) {
+        ArrayList<Integer> indicies = new ArrayList<Integer>();
+        for(int i = binaryRepresentation.length()-1; i >= 0; i--) {
+            if(binaryRepresentation.charAt(i) == '1') {
+                indicies.add(binaryRepresentation.length() - 1 - i);
+            }
+        }
+        return indicies;
     }
 
     private int getNumberOfOnes(String indexBinary) {
@@ -141,6 +164,5 @@ public class Logic {
         }
         return counter;
     }
-
 
 }
