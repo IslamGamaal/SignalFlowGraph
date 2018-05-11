@@ -292,7 +292,7 @@ public class Controller {
             paneInPane.getChildren().add(l2);
             paneInPane.getChildren().add(weightLabel);
 
-            Relation relation = new Relation(Integer.valueOf(weight), nodes.get(numOfFinalNode - 1));
+            Relation relation = new Relation(Float.valueOf(weight), nodes.get(numOfFinalNode - 1));
             nodes.get(numOfInitNode - 1).relations.add(relation);
         } else {
             CubicCurve arc = new CubicCurve();
@@ -371,7 +371,7 @@ public class Controller {
 
 
             String weight = weightField.getText();
-            Relation relation = new Relation(Integer.valueOf(weight), nodes.get(numOfFinalNode - 1));
+            Relation relation = new Relation(Float.valueOf(weight), nodes.get(numOfFinalNode - 1));
             nodes.get(numOfInitNode - 1).relations.add(relation);
             Label weightLabel = new Label();
             Font f;
@@ -410,7 +410,7 @@ public class Controller {
 
         AnchorPane secondaryLayout = new AnchorPane();
 
-        Scene secondScene = new Scene(secondaryLayout, 700, 500);
+        Scene secondScene = new Scene(secondaryLayout, 720, 470);
 
         Stage newWindow = new Stage();
         newWindow.setTitle("Steps");
@@ -418,14 +418,55 @@ public class Controller {
         newWindow.setX(300);
         newWindow.setY(100);
 
-        Label loopsLabel = new Label("Loops");
-        loopsLabel.setLayoutX(50);
-        loopsLabel.setLayoutY(50);
+        Label loopsLabel = new Label("All Loops");
+        loopsLabel.setStyle("-fx-font-size: 1.8em;");
+        loopsLabel.setTextFill(Color.BLUE);
+        loopsLabel.setLayoutX(65);
+        loopsLabel.setLayoutY(10);
 
         TextArea loopsArea = new TextArea();
-
+        loopsArea.setPrefHeight(400);  //sets height of the TextArea to 400 pixels
+        loopsArea.setPrefWidth(200);
+        loopsArea.setLayoutX(30);
+        loopsArea.setLayoutY(50);
+        loopsArea.setEditable(false);
+        loopsArea.setStyle("-fx-font-size: 1.5em;");
+        secondaryLayout.getChildren().add(loopsArea);
         secondaryLayout.getChildren().add(loopsLabel);
 
+        Label ForwardPathsLabel = new Label("Forward Paths");
+        ForwardPathsLabel.setTextFill(Color.BLUE);
+        ForwardPathsLabel.setStyle("-fx-font-size: 1.8em;");
+        ForwardPathsLabel.setLayoutX(275);
+        ForwardPathsLabel.setLayoutY(10);
+
+        TextArea FPArea = new TextArea();
+        FPArea.setPrefHeight(400);  //sets height of the TextArea to 400 pixels
+        FPArea.setPrefWidth(200);
+        FPArea.setLayoutX(260);
+        FPArea.setLayoutY(50);
+        FPArea.setEditable(false);
+        FPArea.setStyle("-fx-font-size: 1.5em;");
+        secondaryLayout.getChildren().add(FPArea);
+        secondaryLayout.getChildren().add(ForwardPathsLabel);
+
+        Label untouchedLabel = new Label("Delta");
+        untouchedLabel.setTextFill(Color.BLUE);
+        untouchedLabel.setStyle("-fx-font-size: 1.8em;");
+        untouchedLabel.setLayoutX(495);
+        untouchedLabel.setLayoutY(10);
+        secondaryLayout.getChildren().add(untouchedLabel);
+
+        if(Logic.loops != null) {
+            for (int i = 0; i < Logic.loops.size(); i++) {
+                loopsArea.appendText("L" + String.valueOf(i + 1) + ": " + Logic.loops.get(i).getName() + "\n");
+            }
+        }
+        if(Logic.forwardPaths != null) {
+            for (int i = 0; i < Logic.forwardPaths.size(); i++) {
+                FPArea.appendText("F" + String.valueOf(i + 1) + ": " + Logic.forwardPaths.get(i).getName() + "\n");
+            }
+        }
         newWindow.show();
     }
     private void drawArrow(double v, double v1) {
