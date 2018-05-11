@@ -455,7 +455,7 @@ public class Controller {
         untouchedLabel.setStyle("-fx-font-size: 1.8em;");
         untouchedLabel.setLayoutX(495);
         untouchedLabel.setLayoutY(10);
-
+        secondaryLayout.getChildren().add(untouchedLabel);
 
         if(Logic.loops != null) {
             for (int i = 0; i < Logic.loops.size(); i++) {
