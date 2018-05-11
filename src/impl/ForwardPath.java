@@ -1,11 +1,12 @@
 package impl;
 
-import sample.Controller;
+import view.Controller;
 
 import java.util.ArrayList;
 
 public class ForwardPath {
     ArrayList<Node> forwardPath;
+    String nameWithoutDashes = "";
     public ForwardPath() {
         forwardPath = new ArrayList<Node>();
     }
@@ -52,5 +53,13 @@ public class ForwardPath {
     private String sortAlphabetically(String name) {
         String sortedName = "";
         return sortedName;
+    }
+    public String getNameWithoutDashes() {
+        String name = "";
+        for(int i = 0; i < forwardPath.size(); i++) {
+            name+= forwardPath.get(i).name;
+        }
+        nameWithoutDashes = name;
+        return nameWithoutDashes;
     }
 }

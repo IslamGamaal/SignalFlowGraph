@@ -1,22 +1,23 @@
-package sample;
+package view;
 
-import com.sun.javafx.geom.Arc2D;
 import impl.Logic;
 import impl.Node;
 import impl.Relation;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,8 +63,6 @@ public class Controller {
     private TextField toField;
     @FXML
     private TextField weightField;
-    @FXML
-    private Button transferFunctionButton;
     @FXML
     private TextArea weightTextBox;
 
@@ -200,7 +199,6 @@ public class Controller {
             plotButton.fire();
         }
     }
-
     @FXML
     void drawNodes(MouseEvent event) {
         nodes = new ArrayList<Node>();
@@ -403,7 +401,24 @@ public class Controller {
     void calculateTransferFunction(MouseEvent event) {
         Logic s = new Logic(nodes);
     }
+    @FXML
+    void doSteps(ActionEvent event) {
 
+        StackPane secondaryLayout = new StackPane();
+
+        Scene secondScene = new Scene(secondaryLayout, 700, 500);
+
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Steps");
+        newWindow.setScene(secondScene);
+
+        // Set position of second window, related to primary window.
+        newWindow.setX(300);
+        newWindow.setY(100);
+
+        newWindow.show();
+    }
     private void drawArrow(double v, double v1) {
         Line l1 = new Line();
         l1.setStartX(v);
@@ -460,6 +475,4 @@ public class Controller {
         paneInPane.getChildren().add(l2);
 
     }
-
-
 }
