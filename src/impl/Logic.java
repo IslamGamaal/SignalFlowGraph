@@ -16,6 +16,7 @@ public class Logic {
     ArrayList<ForwardPath> forwardPaths;
     Node startNode;
     Node endNode;
+    int transferFunction;
     public Logic(ArrayList<Node> nodes) {
         this.nodes = nodes;
         visited = new boolean[nodes.size()];
@@ -34,6 +35,7 @@ public class Logic {
         }
 //        nonTouched = new ArrayList[loops.size()+1];
 //        getUnTouchedLoops();
+        getTransferFunction();
         int x = 0;
     }
 
@@ -213,8 +215,14 @@ public class Logic {
         int generalDelta =getDelta(this.loops, nonTouched);
         int segmaDelta = 0;
         for (int i = 0; i <forwardPaths.size() ; i++) {
-
+            ArrayList<Loop> matchingLoops = getMatchingLoops(forwardPaths.get(i));
+            ArrayList<ArrayList<Loop>>[] nonTouchedDelta;
+            nonTouchedDelta = getUnTouchedLoops(matchingLoops);
+            int delta = getDelta(matchingLoops, nonTouchedDelta);
+            segmaDelta +=delta;
         }
+        this.transferFunction = segmaDelta / generalDelta;
+
     }
 
     private int getDelta(ArrayList<Loop> loops, ArrayList<ArrayList<Loop>>[] nonTouched) {
