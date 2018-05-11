@@ -39,7 +39,7 @@ public class Logic {
     }
 
     public boolean dfsForward(Node checkNode){
-        boolean temp =false;
+        boolean temp = false;
         if (checkNode == endNode){
             ForwardPath forwardPath = new ForwardPath();
             Stack tempStack = new Stack();
@@ -119,7 +119,9 @@ public class Logic {
                     testedLoops.add(loops.get((Integer) indexes.get(j)));
                 }
                 if(areUntouched(testedLoops)){
-                    nonTouched[numberOfOnes] = new ArrayList<Loop>();
+                    if (nonTouched[numberOfOnes - 1] ==null) {
+                        nonTouched[numberOfOnes - 1] = new ArrayList<Loop>();
+                    }
                     for (int j = 0; j <testedLoops.size() ; j++) {
                         nonTouched[numberOfOnes - 1].add(testedLoops.get(j));
                     }

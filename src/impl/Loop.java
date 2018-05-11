@@ -62,7 +62,7 @@ public class Loop {
         for(int i = 0; i < loop.size(); i++) {
             name += loop.get(i).name;
         }
-        nameWithoutDashes = name;
+        nameWithoutDashes = name.substring(0,name.length() - 2);
         return nameWithoutDashes;
     }
 }
