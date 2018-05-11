@@ -34,6 +34,8 @@ public class Logic {
             dfsLoops(nodes.get(i),nodes.get(i));
         }
         nonTouched = new ArrayList[loops.size()];
+        getUnTouchedLoops();
+        int x = 0;
     }
 
     public boolean dfsForward(Node checkNode){
@@ -111,7 +113,7 @@ public class Logic {
             String indexBinary = Integer.toBinaryString(i);
             int numberOfOnes = getNumberOfOnes(indexBinary);
             if (numberOfOnes != 1 && numberOfOnes!= 0){
-                ArrayList indexes = getOnesIndecies();
+                ArrayList indexes = getOnesIndecies(indexBinary);
                 ArrayList<Loop> testedLoops = new ArrayList<Loop>();
                 for (int j = 0; j < indexes.size(); j++) {
                     testedLoops.add(loops.get((Integer) indexes.get(j)));
@@ -119,22 +121,21 @@ public class Logic {
                 if(areUntouched(testedLoops)){
                     nonTouched[numberOfOnes] = new ArrayList<Loop>();
                     for (int j = 0; j <testedLoops.size() ; j++) {
-                        nonTouched[numberOfOnes].add(testedLoops.get(i));
+                        nonTouched[numberOfOnes - 1].add(testedLoops.get(j));
                     }
                 }
             }
         }
     }
 
-    }
 
     private boolean areUntouched(ArrayList<Loop> loops) {
         Set allNodes = new HashSet();
         String allNodesCascaded = "";
         int lengthOfAllLoops = 0;
         for(int i = 0; i < loops.size(); i++) {
-            allNodesCascaded+= loops.get(i).getName();
-            lengthOfAllLoops+= loops.get(i).getName().length();
+            allNodesCascaded+= loops.get(i).getNameWithoutDashes();
+            lengthOfAllLoops+= loops.get(i).getNameWithoutDashes().length();
         }
         for(int i = 0; i < allNodesCascaded.length(); i++) {
             allNodes.add(allNodesCascaded.charAt(i));

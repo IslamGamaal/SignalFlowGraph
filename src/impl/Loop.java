@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Loop {
     ArrayList<Node> loop;
+    String nameWithoutDashes = "";
     public Loop() {
         loop = new ArrayList<Node>();
     }
@@ -29,6 +30,7 @@ public class Loop {
         for(int i = 0; i < loop.size(); i++) {
             name += loop.get(i).name;
         }
+        nameWithoutDashes = name;
         //name = sortAlphabetically(name);
         int numOfNodes = Controller.numbOfNodes;
         char[] nameArray = new char[numOfNodes];
@@ -54,5 +56,13 @@ public class Loop {
         String sortedName = "";
 
         return sortedName;
+    }
+    public String getNameWithoutDashes() {
+        String name = "";
+        for(int i = 0; i < loop.size(); i++) {
+            name += loop.get(i).name;
+        }
+        nameWithoutDashes = name;
+        return nameWithoutDashes;
     }
 }
