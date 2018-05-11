@@ -8,10 +8,10 @@ public class Logic {
     boolean[] visited;
     ArrayList<Loop> loops;
     Node TempStartNode;
+    ArrayList<ArrayList<NonTouchedLoops>> nonTouchedLoops;
     boolean startCall = new Boolean(false);
     Stack stack = new Stack() ;
     ArrayList<ForwardPath> forwardPaths;
-    ArrayList<ArrayList> nonTouchedLoops;
     Node startNode;
     Node endNode;
     public Logic(ArrayList<Node> nodes) {
