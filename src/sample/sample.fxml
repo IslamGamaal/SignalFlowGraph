@@ -20,7 +20,7 @@
 
 <BorderPane prefHeight="604.0" prefWidth="660.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.Controller">
   <center>
-    <ScrollPane fx:id="pane" hbarPolicy="AS_NEEDED" onDragDetected="#drawLineByDrag" onDragOver="#drawLineByDrag" onMouseDragReleased="#drawFinalAfterDrag" onMouseDragged="#drawFinalAfterDrag" prefHeight="603.0" prefWidth="459.0" vbarPolicy="AS_NEEDED">
+    <ScrollPane fx:id="pane" hbarPolicy="AS_NEEDED" onDragDetected="#drawLineByDrag" onMouseDragReleased="#drawFinalAfterDrag" onMouseDragged="#drawFinalAfterDrag" prefHeight="603.0" prefWidth="459.0" vbarPolicy="AS_NEEDED">
       <content>
         <Pane fx:id="paneInPane" onMousePressed="#globals" />
       </content>

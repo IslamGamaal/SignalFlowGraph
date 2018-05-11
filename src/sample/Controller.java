@@ -93,7 +93,6 @@ public class Controller {
 
     @FXML
     void drawLineByDrag(MouseEvent event) {
-        System.out.println("called me");
         globalStartX = (int)event.getX() - 10;
         globalStartY = (int)event.getY();
         for(int i = 0; i < positionsX.size(); i++) {
