@@ -1,10 +1,10 @@
 package impl;
 
 public class Relation {
-    public  int weight;
+    public  float weight;
     public  Node nextNode;
 
-    public Relation (int weight, Node t) {
+    public Relation (float weight, Node t) {
         this.weight = weight;
         this.nextNode = t;
     }

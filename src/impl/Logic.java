@@ -8,12 +8,12 @@ import java.util.Stack;
 public class Logic {
     ArrayList<Node> nodes;
     boolean[] visited;
-    ArrayList<Loop> loops;
+    public static ArrayList<Loop> loops;
     Node TempStartNode;
-    ArrayList<ArrayList<NonTouchedLoops>> nonTouchedLoops;
+    public static ArrayList<ArrayList<NonTouchedLoops>> nonTouchedLoops;
     boolean startCall = new Boolean(false);
     Stack stack = new Stack() ;
-    ArrayList<ForwardPath> forwardPaths;
+    public static ArrayList<ForwardPath> forwardPaths;
     Node startNode;
     Node endNode;
     public Logic(ArrayList<Node> nodes) {
