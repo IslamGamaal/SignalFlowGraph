@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -290,6 +291,9 @@ public class Controller {
             paneInPane.getChildren().add(l1);
             paneInPane.getChildren().add(l2);
             paneInPane.getChildren().add(weightLabel);
+
+            Relation relation = new Relation(Integer.valueOf(weight), nodes.get(numOfFinalNode - 1));
+            nodes.get(numOfInitNode - 1).relations.add(relation);
         } else {
             CubicCurve arc = new CubicCurve();
             //arc.setFill(Color.gray(0.96));
@@ -404,18 +408,23 @@ public class Controller {
     @FXML
     void doSteps(ActionEvent event) {
 
-        StackPane secondaryLayout = new StackPane();
+        AnchorPane secondaryLayout = new AnchorPane();
 
         Scene secondScene = new Scene(secondaryLayout, 700, 500);
 
-        // New window (Stage)
         Stage newWindow = new Stage();
         newWindow.setTitle("Steps");
         newWindow.setScene(secondScene);
-
-        // Set position of second window, related to primary window.
         newWindow.setX(300);
         newWindow.setY(100);
+
+        Label loopsLabel = new Label("Loops");
+        loopsLabel.setLayoutX(50);
+        loopsLabel.setLayoutY(50);
+
+        TextArea loopsArea = new TextArea();
+
+        secondaryLayout.getChildren().add(loopsLabel);
 
         newWindow.show();
     }
