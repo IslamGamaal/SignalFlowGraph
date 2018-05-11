@@ -14,6 +14,7 @@ public class Logic {
     ArrayList<ForwardPath> forwardPaths;
     Node startNode;
     Node endNode;
+    ArrayList<Loop>[] nonTouched;
     public Logic(ArrayList<Node> nodes) {
         this.nodes = nodes;
         visited = new boolean[nodes.size()];
@@ -30,6 +31,7 @@ public class Logic {
             startCall = true;
             dfsLoops(nodes.get(i),nodes.get(i));
         }
+        nonTouched = new ArrayList[loops.size()];
     }
 
     public boolean dfsForward(Node checkNode){
@@ -102,10 +104,43 @@ public class Logic {
         return temp;
     }
 
-    public void transferFunction(){
-
+    public void getUnTouchedLoops(){
+        for (int i = 0; i < Math.pow(2,loops.size()); i++) {
+            String indexBinary = Integer.toBinaryString(i);
+            int numberOfOnes = getNumberOfOnes(indexBinary);
+            if (numberOfOnes != 1 && numberOfOnes!= 0){
+                ArrayList indexes = getOnesIndecies();
+                ArrayList<Loop> testedLoops = new ArrayList<Loop>();
+                for (int j = 0; j < indexes.size(); j++) {
+                    testedLoops.add(loops.get((Integer) indexes.get(j)));
+                }
+                if(areUntouched(testedLoops)){
+                    nonTouched[numberOfOnes] = new ArrayList<Loop>();
+                    for (int j = 0; j <testedLoops.size() ; j++) {
+                        nonTouched[numberOfOnes].add(testedLoops.get(i));
+                    }
+                }
+            }
+        }
     }
 
+    private boolean areUntouched(ArrayList<Loop> testedLoops) {
+        return true;
+    }
+
+    private ArrayList getOnesIndecies() {
+        return null;
+    }
+
+    private int getNumberOfOnes(String indexBinary) {
+        int counter =0;
+        for (int i = 0; i <indexBinary.length() ; i++) {
+            if (indexBinary.charAt(i) == '1'){
+                counter ++;
+            }
+        }
+        return counter;
+    }
 
 
 }
