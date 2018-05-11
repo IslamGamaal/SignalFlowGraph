@@ -16,6 +16,7 @@ public class Logic {
     public static ArrayList<ForwardPath> forwardPaths;
     Node startNode;
     Node endNode;
+    public static float transferFunction;
     public Logic(ArrayList<Node> nodes) {
         this.nodes = nodes;
         visited = new boolean[nodes.size()];
@@ -34,6 +35,7 @@ public class Logic {
         }
 //        nonTouched = new ArrayList[loops.size()+1];
 //        getUnTouchedLoops();
+        getTransferFunction();
         int x = 0;
     }
 
@@ -61,8 +63,20 @@ public class Logic {
         for (int i = 0; i <checkNode.relations.size() ; i++) {
             stack.push(checkNode.relations.get(i).nextNode);
             temp = dfsForward(checkNode.relations.get(i).nextNode);
-            while (stack.size() >0&& stack.peek() != checkNode){
-                stack.pop();
+            while (stack.size() >0){
+                if (stack.peek()!= checkNode)
+                    stack.pop();
+                else if(stack.size()>=2){
+                    Node tempNode = (Node) stack.pop();
+                    if (stack.peek() ==checkNode)
+                        break;
+                    else{
+                        stack.push(tempNode);
+                        break;
+                    }
+                }
+                else
+                    break;
             }
         }
         visited[nodes.indexOf(checkNode)] = false;
@@ -99,8 +113,20 @@ public class Logic {
         for (int i = 0; i <checkNode.relations.size() ; i++) {
             stack.push(checkNode.relations.get(i).nextNode);
             dfsLoops(sNode , checkNode.relations.get(i).nextNode);
-            while (stack.size() >0&& stack.peek() != checkNode){
-                stack.pop();
+            while (stack.size() >0){
+                if (stack.peek()!= checkNode)
+                    stack.pop();
+                else if(stack.size()>=2){
+                    Node tempNode = (Node) stack.pop();
+                    if (stack.peek() ==checkNode)
+                        break;
+                    else{
+                        stack.push(tempNode);
+                        break;
+                    }
+                }
+                else
+                    break;
             }
         }
         visited[nodes.indexOf(checkNode)] = false;
@@ -188,10 +214,10 @@ public class Logic {
         return matchingLoops;
     }
 
-    int sumOfProductOfNonTouchingLoops(ArrayList<ArrayList<Loop>> nonTouched){
-        int sum = 0;
+    float sumOfProductOfNonTouchingLoops(ArrayList<ArrayList<Loop>> nonTouched){
+        float sum = 0;
         for (int i = 0; i <nonTouched.size() ; i++) {
-            int gain =1;
+            float gain =1;
             for (int j = 0; j <nonTouched.get(i).size() ; j++) {
                 gain = gain * nonTouched.get(i).get(j).getWeight();
             }
@@ -199,8 +225,8 @@ public class Logic {
         }
         return sum;
     }
-    int sumOfLoops(ArrayList<Loop> loops){
-        int sum = 0;
+    float sumOfLoops(ArrayList<Loop> loops){
+        float sum = 0;
         for (int i = 0; i < loops.size(); i++) {
             sum += loops.get(i).getWeight();
         }
@@ -210,17 +236,24 @@ public class Logic {
     void getTransferFunction(){
         ArrayList<ArrayList<Loop>>[] nonTouched;
         nonTouched = getUnTouchedLoops(loops);
-        int generalDelta =getDelta(this.loops, nonTouched);
-        int segmaDelta = 0;
+        float generalDelta =getDelta(this.loops, nonTouched);
+        float segmaDelta = 0;
         for (int i = 0; i <forwardPaths.size() ; i++) {
-
+            ArrayList<Loop> matchingLoops = getMatchingLoops(forwardPaths.get(i));
+            ArrayList<ArrayList<Loop>>[] nonTouchedDelta;
+            nonTouchedDelta = getUnTouchedLoops(matchingLoops);
+            float delta = getDelta(matchingLoops, nonTouchedDelta);
+            delta = delta * forwardPaths.get(i).getWeight();
+            segmaDelta +=delta;
         }
+        this.transferFunction = segmaDelta / generalDelta;
+
     }
 
-    private int getDelta(ArrayList<Loop> loops, ArrayList<ArrayList<Loop>>[] nonTouched) {
-        int delta = 1 - this.sumOfLoops(loops);
-        for (int i = 2; i <nonTouched.length && nonTouched[i].size()!=0; i++) {
-            int sum = 0;
+    private float getDelta(ArrayList<Loop> loops, ArrayList<ArrayList<Loop>>[] nonTouched) {
+        float delta = 1 - this.sumOfLoops(loops);
+        for (int i = 2; i <nonTouched.length && nonTouched[i] != null && nonTouched[i].size()!=0; i++) {
+            float sum = 0;
             for (int j = 0; j <nonTouched[i].size(); j++) {
                  sum = sumOfProductOfNonTouchingLoops(nonTouched[i]);
             }
