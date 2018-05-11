@@ -1,6 +1,6 @@
 package impl;
 
-import sample.Controller;
+import view.Controller;
 
 import java.util.ArrayList;
 

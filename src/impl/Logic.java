@@ -167,5 +167,21 @@ public class Logic {
         }
         return counter;
     }
-
+    private ArrayList<Loop> getMatchingLoops(ForwardPath f) {
+        ArrayList<Loop> matchingLoops = new ArrayList<Loop>();
+        for(int i = 0; i < loops.size(); i++) {
+            Set allNodes = new HashSet();
+            String allNodesCascaded = "";
+            int lengthOfAllLoops = 0;
+            lengthOfAllLoops = loops.get(i).getNameWithoutDashes().length() + f.getNameWithoutDashes().length();
+            allNodesCascaded = loops.get(i).getNameWithoutDashes() + f.getNameWithoutDashes();
+            for(int j = 0; j < allNodesCascaded.length(); j++) {
+                allNodes.add(allNodesCascaded.charAt(j));
+            }
+            if(lengthOfAllLoops == allNodes.size()) {
+                matchingLoops.add(loops.get(i));
+            }
+        }
+        return matchingLoops;
+    }
 }
