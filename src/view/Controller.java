@@ -404,7 +404,7 @@ public class Controller {
     @FXML
     void calculateTransferFunction(MouseEvent event) {
         Logic s = new Logic(nodes);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Overall function : 15", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Overall function : " + String.valueOf(Logic.transferFunction), ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
             //do stuff
@@ -415,7 +415,7 @@ public class Controller {
 
         AnchorPane secondaryLayout = new AnchorPane();
 
-        Scene secondScene = new Scene(secondaryLayout, 720, 470);
+        Scene secondScene = new Scene(secondaryLayout, 485, 470);
 
         Stage newWindow = new Stage();
         newWindow.setTitle("Steps");
@@ -455,12 +455,6 @@ public class Controller {
         secondaryLayout.getChildren().add(FPArea);
         secondaryLayout.getChildren().add(ForwardPathsLabel);
 
-        Label untouchedLabel = new Label("Delta");
-        untouchedLabel.setTextFill(Color.BLUE);
-        untouchedLabel.setStyle("-fx-font-size: 1.8em;");
-        untouchedLabel.setLayoutX(495);
-        untouchedLabel.setLayoutY(10);
-        secondaryLayout.getChildren().add(untouchedLabel);
 
         if(Logic.loops != null) {
             for (int i = 0; i < Logic.loops.size(); i++) {
