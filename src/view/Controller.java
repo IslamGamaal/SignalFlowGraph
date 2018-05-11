@@ -404,6 +404,11 @@ public class Controller {
     @FXML
     void calculateTransferFunction(MouseEvent event) {
         Logic s = new Logic(nodes);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Overall function : 15", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.YES) {
+            //do stuff
+        }
     }
     @FXML
     void doSteps(ActionEvent event) {
