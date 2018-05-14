@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.CubicCurve?>
@@ -18,11 +19,19 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="604.0" prefWidth="660.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="view.Controller">
+<BorderPane prefHeight="614.0" prefWidth="660.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="view.Controller">
   <center>
     <ScrollPane fx:id="pane" hbarPolicy="AS_NEEDED" onDragDetected="#drawLineByDrag" onMouseDragReleased="#drawFinalAfterDrag" onMouseDragged="#drawFinalAfterDrag" prefHeight="603.0" prefWidth="459.0" vbarPolicy="AS_NEEDED">
       <content>
-        <Pane fx:id="paneInPane" onMousePressed="#globals" />
+        <Pane fx:id="paneInPane" onMousePressed="#globals">
+          <children>
+            <Label id="lblStep1" fx:id="fieldStep1" layoutX="0.0" layoutY="9.0" prefHeight="46.0" prefWidth="329.0" style="-fx-background-color: white;&#10;-fx-border-color: black;" text="" visible="false">
+              <font>
+                <Font size="17.0" />
+              </font>
+            </Label>
+          </children>
+        </Pane>
       </content>
     </ScrollPane>
   </center>
@@ -49,14 +58,24 @@
         <Line endX="5.0" endY="0.0" layoutX="92.0" layoutY="172.0" startX="-9.0" startY="-4.0" />
         <Line endX="-22.0" endY="-1.0" layoutX="119.0" layoutY="164.0" startX="-23.0" startY="8.0" />
         <Line endX="100.0" layoutX="100.0" layoutY="126.0" startX="-100.0" />
-        <Button fx:id="transferFunctionButton" layoutX="33.0" layoutY="477.0" mnemonicParsing="false" onMouseClicked="#calculateTransferFunction" prefHeight="64.0" prefWidth="135.0" style="-fx-background-color : grey;" text="Transfer Function" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+        <Button fx:id="transferFunctionButton" layoutX="37.0" layoutY="477.0" mnemonicParsing="false" onMouseClicked="#calculateTransferFunction" prefHeight="64.0" prefWidth="135.0" style="-fx-background-color : grey;" text="Calculate TF ناو" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true">
           <font>
             <Font size="20.0" />
           </font>
         </Button>
-        <Button fx:id="stepsButton" layoutX="35.0" layoutY="558.0" mnemonicParsing="false" onAction="#doSteps" prefHeight="24.0" prefWidth="135.0" style="-fx-background-color : lightgreen;" text="Steps &gt;&gt;" />
+        <Button fx:id="stepsButton" layoutX="37.0" layoutY="542.0" mnemonicParsing="false" onAction="#doSteps" prefHeight="24.0" prefWidth="135.0" style="-fx-background-color : lightgreen;" text="Steps &gt;&gt;" />
         <TextArea fx:id="weightTextBox" editable="false" layoutX="0.0" layoutY="282.0" prefHeight="182.0" prefWidth="201.0" wrapText="true" />
         <Label layoutX="2.0" layoutY="126.0" prefHeight="32.0" prefWidth="201.0" text="Dragging is easier, Give a try" textFill="#0021cc" />
+        <CubicCurve fx:id="extraStep1" controlX1="-193.0" controlX2="-7.0" controlY1="-30.0" controlY2="-23.0" endX="61.0" endY="-15.0" fill="#59adff00" layoutX="165.0" layoutY="39.0" startX="-102.0" startY="17.0" stroke="BLACK" visible="false" />
+        <CubicCurve fx:id="extraStep2" controlX1="100.0" controlX2="64.0" controlY1="49.0" controlY2="-56.0" endX="105.0" endY="-64.0" layoutX="95.0" layoutY="96.0" startX="53.0" startY="17.0" stroke="BLACK" visible="false">
+          <fill>
+            <Color blue="1.000" green="0.565" opacity="0.000" red="0.118" fx:id="x2" />
+          </fill>
+        </CubicCurve>
+        <Button fx:id="helpButton" contentDisplay="CENTER" font="$x1" layoutX="7.0" layoutY="575.0" minWidth="24.0" mnemonicParsing="false" onAction="#help" prefHeight="24.0" prefWidth="48.0" style="-fx-background-color: blue;" text="?" textAlignment="LEFT" textFill="WHITE" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
+        <CubicCurve fx:id="extraStep3" controlX1="63.0" controlX2="292.0" controlY1="61.0" controlY2="44.0" endX="220.0" endY="138.0" fill="$x2" layoutX="182.0" layoutY="111.0" startX="64.0" startY="-54.0" stroke="BLACK" visible="false" />
+        <CubicCurve fx:id="extraStep4" controlX1="-5.0" controlX2="98.0" controlY1="-175.0" controlY2="95.0" endX="205.0" endY="-8.0" fill="$x2" layoutX="188.0" layoutY="509.0" startX="-41.0" startY="-35.0" stroke="BLACK" visible="false" />
+        <Rectangle fx:id="extraStep33" arcHeight="5.0" arcWidth="5.0" fill="#4333ff4d" height="255.20980834960938" layoutX="215.0" layoutY="207.0" stroke="#0029ff42" strokeType="INSIDE" visible="false" width="431.0" />
       </children>
     </AnchorPane>
   </left>

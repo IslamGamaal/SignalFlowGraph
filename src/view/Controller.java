@@ -1,8 +1,6 @@
 package view;
 
-import impl.Logic;
-import impl.Node;
-import impl.Relation;
+import impl.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,10 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -66,6 +61,19 @@ public class Controller {
     private TextField weightField;
     @FXML
     private TextArea weightTextBox;
+    @FXML
+    private CubicCurve extraStep1;
+
+    @FXML
+    private CubicCurve extraStep2;
+    @FXML
+    private CubicCurve extraStep3;
+    @FXML
+    private CubicCurve extraStep4;
+    @FXML
+    private Label fieldStep1;
+    @FXML
+    private Button helpButton;
 
     int globalStartX;
     int globalStartY;
@@ -74,13 +82,12 @@ public class Controller {
     int offset = 30;
 
     @FXML
-    void initiallize() {
-        paneInPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                System.out.println("55");
-            }
-        });
+    public void initiallize() {
+        extraStep1.setVisible(false);
+        extraStep2.setVisible(false);
+        fieldStep1.setVisible(false);
+        fieldStep1.setStyle("-fx-background-color: white;");
+        helpButton.setStyle("-fx-background-color: blue;");
     }
     CubicCurve c;
     Line l;
@@ -176,7 +183,65 @@ public class Controller {
         });
 
     }
+    int boll = 1;
+    @FXML
+    private Rectangle extraStep33;
+    @FXML
+    void help(ActionEvent event) {
+        if(boll == 1) {
+            extraStep1.setVisible(true);
+            fieldStep1.setText("\tEnter Number of Nodes here");
+            fieldStep1.setVisible(true);
+            boll = 2;
+        } else if(boll == 2) {
+            extraStep1.setVisible(false);
+            extraStep2.setVisible(false);
+            fieldStep1.setVisible(false);
+            extraStep2.setVisible(true);
+            fieldStep1.setText("\tDraw these nodes from here");
+            fieldStep1.setVisible(true);
+            boll = 3;
+        } else if(boll == 3) {
+            extraStep1.setVisible(false);
+            extraStep2.setVisible(false);
+            fieldStep1.setVisible(false);
+            extraStep3.setVisible(true);
+            extraStep33.setVisible(true);
+            fieldStep1.setText("\tFreely Drag and Drop");
+            fieldStep1.setVisible(true);
+            boll = 4;
+        } else if(boll == 4) {
+            extraStep1.setVisible(false);
+            extraStep2.setVisible(false);
+            extraStep3.setVisible(false);
+            fieldStep1.setVisible(false);
+            extraStep33.setVisible(false);
 
+            extraStep4.setVisible(true);
+            fieldStep2 = new Label("\n   Press here to get Transfere Function.   \n\t");
+            Font ff = new Font(20);
+            fieldStep2.setStyle(fieldStep1.getStyle() + "-fx-max-height:300;");
+            fieldStep2.setLayoutX(200);
+            fieldStep2.setFont(ff);
+            fieldStep2.setLayoutY(460);
+            paneInPane.getChildren().add(fieldStep2);
+            fieldStep2.setVisible(true);
+            boll = 5;
+        } else if(boll == 5) {
+            extraStep1.setVisible(false);
+            extraStep2.setVisible(false);
+            extraStep3.setVisible(false);
+            extraStep4.setVisible(false);
+            fieldStep1.setVisible(false);
+            fieldStep2.setVisible(false);
+            boll = 1;
+        } else if(boll == 6) {
+            extraStep1.setVisible(false);
+            extraStep2.setVisible(false);
+            fieldStep1.setVisible(false);
+            boll = 1;
+        }
+    }
     @FXML
     void drawFinalAfterDrag(MouseEvent event) {
         paneInPane.getChildren().remove(c);
@@ -212,7 +277,7 @@ public class Controller {
             nodes.add(node);
         }
         paneInPane.getChildren().clear();
-        x = 50;
+        x = 0;
         positionsX = new ArrayList();
         positionsY = new ArrayList();
         for (int i = 0; i < numOfNodes; i++) {
@@ -242,6 +307,7 @@ public class Controller {
         }
 
     }
+    Label fieldStep2;
     @FXML
     void drawLines(ActionEvent event) {
         fromField.setText(String.valueOf((Integer.valueOf(fromField.getText().charAt(0)) - 96)));
@@ -404,7 +470,7 @@ public class Controller {
     @FXML
     void calculateTransferFunction(MouseEvent event) {
         Logic s = new Logic(nodes);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Overall function : " + String.valueOf(Logic.transferFunction), ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Overall function : " + String.valueOf(Logic.transferFunction) + " ya Islam Beeh", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
             //do stuff
@@ -415,7 +481,7 @@ public class Controller {
 
         AnchorPane secondaryLayout = new AnchorPane();
 
-        Scene secondScene = new Scene(secondaryLayout, 485, 470);
+        Scene secondScene = new Scene(secondaryLayout, 950, 470);
 
         Stage newWindow = new Stage();
         newWindow.setTitle("Steps");
@@ -455,18 +521,100 @@ public class Controller {
         secondaryLayout.getChildren().add(FPArea);
         secondaryLayout.getChildren().add(ForwardPathsLabel);
 
+        Label unTouchedLabel = new Label("Untouched Loops");
+        unTouchedLabel.setStyle("-fx-font-size: 1.8em;");
+        unTouchedLabel.setTextFill(Color.BLUE);
+        unTouchedLabel.setLayoutX(485);
+        unTouchedLabel.setLayoutY(10);
+
+        TextArea unTouchedArea = new TextArea();
+        unTouchedArea.setPrefHeight(400);  //sets height of the TextArea to 400 pixels
+        unTouchedArea.setPrefWidth(200);
+        unTouchedArea.setLayoutX(490);
+        unTouchedArea.setLayoutY(50);
+        unTouchedArea.setEditable(false);
+        unTouchedArea.setStyle("-fx-font-size: 1.5em;");
+        secondaryLayout.getChildren().add(unTouchedArea);
+        secondaryLayout.getChildren().add(unTouchedLabel);
+
+        Label deltasLabel = new Label("Deltas");
+        deltasLabel.setStyle("-fx-font-size: 1.8em;");
+        deltasLabel.setTextFill(Color.BLUE);
+        deltasLabel.setLayoutX(770);
+        deltasLabel.setLayoutY(10);
+
+        TextArea deltasArea = new TextArea();
+        deltasArea.setPrefHeight(400);  //sets height of the TextArea to 400 pixels
+        deltasArea.setPrefWidth(200);
+        deltasArea.setLayoutX(720);
+        deltasArea.setLayoutY(50);
+        deltasArea.setEditable(false);
+        deltasArea.setStyle("-fx-font-size: 1.5em;");
+        secondaryLayout.getChildren().add(deltasArea);
+        secondaryLayout.getChildren().add(deltasLabel);
 
         if(Logic.loops != null) {
+            loopsArea.appendText("╔═══════════════\n");
             for (int i = 0; i < Logic.loops.size(); i++) {
-                loopsArea.appendText("L" + String.valueOf(i + 1) + ": " + Logic.loops.get(i).getName() + "\n");
+                loopsArea.appendText("╠ L" + String.valueOf(i + 1) + ": " + Logic.loops.get(i).getName() + "\n");
+                if(i < Logic.loops.size() - 1) {
+                    loopsArea.appendText("╠═══════════════\n");
+                } else {
+                    loopsArea.appendText("╚═══════════════\n");
+                }
             }
         }
         if(Logic.forwardPaths != null) {
+            FPArea.appendText("╔═══════════════\n");
             for (int i = 0; i < Logic.forwardPaths.size(); i++) {
-                FPArea.appendText("F" + String.valueOf(i + 1) + ": " + Logic.forwardPaths.get(i).getName() + "\n");
+                FPArea.appendText("╠ F" + String.valueOf(i + 1) + ": " + Logic.forwardPaths.get(i).getName() + "\n");
+                if(i < Logic.forwardPaths.size() - 1) {
+                    FPArea.appendText("╠═══════════════\n");
+                } else {
+                    FPArea.appendText("╚═══════════════\n");
+                }
             }
         }
+        if(Logic.nonTouchedLoops != null) {
+            unTouchedArea.appendText("╔═══════════════\n");
+            for (int i = 2; i < Logic.nonTouchedLoops.length; i++) {
+                System.out.println(Logic.nonTouchedLoops.length);
+                if(Logic.nonTouchedLoops[i] != null) {
+                    unTouchedArea.appendText("╠ " + String.valueOf(i) + " non Touched \n╠≡≡≡≡≡≡≡≡≡≡≡\n" + printUntouchedLoop(Logic.nonTouchedLoops[i]) + "\n");
+                    unTouchedArea.appendText("╠═══════════════\n");
+                 } else {
+                    unTouchedArea.appendText("╚═══════════════\n");
+                    break;
+                }
+            }
+        }
+        if(Logic.deltas != null) {
+            deltasArea.appendText("╔═══════════════\n");
+            for (int i = 0; i < Logic.deltas.size(); i++) {
+                deltasArea.appendText("╠ ∆" + String.valueOf(i + 1) + ": " + String.valueOf(Logic.deltas.get(i)) + "\n");
+                if(i < Logic.deltas.size() - 1) {
+                    deltasArea.appendText("╠═══════════════\n");
+                } else {
+                    deltasArea.appendText("╚═══════════════\n");
+                }
+            }
+        }
+
         newWindow.show();
+    }
+    private String printUntouchedLoop(ArrayList<ArrayList<Loop>> untouchedloops) {
+        String untouchedString = "";
+        for(int i = 0; i < untouchedloops.size(); i++) {
+            for(int j = 0; j < untouchedloops.get(i).size() - 1; j++) {
+                untouchedString +="╠ " + untouchedloops.get(i).get(j).getNameWithoutDashes();
+                untouchedString += " with ";
+            }
+            untouchedString += untouchedloops.get(i).get(untouchedloops.get(i).size() - 1).getNameWithoutDashes();
+            if(i < untouchedloops.size() - 1) {
+                untouchedString += "\n";
+            }
+        }
+        return untouchedString;
     }
     private void drawArrow(double v, double v1) {
         Line l1 = new Line();

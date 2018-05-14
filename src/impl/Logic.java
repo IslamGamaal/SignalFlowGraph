@@ -10,12 +10,13 @@ public class Logic {
     boolean[] visited;
     public static ArrayList<Loop> loops;
     Node TempStartNode;
-    public static ArrayList<ArrayList<NonTouchedLoops>> nonTouchedLoops;
+    public static ArrayList<ArrayList<Loop>>[] nonTouchedLoops;
     boolean startCall = new Boolean(false);
     Stack stack = new Stack() ;
     public static ArrayList<ForwardPath> forwardPaths;
     Node startNode;
     Node endNode;
+    public static ArrayList<Float> deltas = new ArrayList<Float>();
     public static float transferFunction;
     public Logic(ArrayList<Node> nodes) {
         this.nodes = nodes;
@@ -33,7 +34,8 @@ public class Logic {
             startCall = true;
             dfsLoops(nodes.get(i),nodes.get(i));
         }
-//        nonTouched = new ArrayList[loops.size()+1];
+        deltas = new ArrayList<>();
+       /*nonTouchedLoops = new ArrayList[loops.size()+1];*/
 //        getUnTouchedLoops();
         getTransferFunction();
         int x = 0;
@@ -236,6 +238,7 @@ public class Logic {
     void getTransferFunction(){
         ArrayList<ArrayList<Loop>>[] nonTouched;
         nonTouched = getUnTouchedLoops(loops);
+        nonTouchedLoops = nonTouched;
         float generalDelta =getDelta(this.loops, nonTouched);
         float segmaDelta = 0;
         for (int i = 0; i <forwardPaths.size() ; i++) {
@@ -244,6 +247,7 @@ public class Logic {
             nonTouchedDelta = getUnTouchedLoops(matchingLoops);
             float delta = getDelta(matchingLoops, nonTouchedDelta);
             delta = delta * forwardPaths.get(i).getWeight();
+            deltas.add(delta);
             segmaDelta +=delta;
         }
         this.transferFunction = segmaDelta / generalDelta;
